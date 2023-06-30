@@ -1,8 +1,9 @@
 {
   "name": "@statebacked/machine-def",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "description": "Useful types and utilities for defining StateBacked.dev machine definitions for the State Backed XState backend as a service",
   "main": "lib/index.js",
+  "module": "es/index.js",
   "types": "lib/index.d.ts",
   "sideEffects": false,
   "scripts": {
