@@ -1,0 +1,13 @@
+{
+  "entryPoints": ["./src/index.ts"],
+  "out": "doc",
+  "sidebarLinks": {
+    "State Backed": "https://statebacked.dev",
+    "State Backed Docs": "https://docs.statebacked.dev",
+    "Github": "https://github.com/statebacked/machine-def"
+  },
+  "navigationLinks": {
+    "State Backed": "https://statebacked.dev",
+  },
+  "treatWarningsAsErrors": true
+}
