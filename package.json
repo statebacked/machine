@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc src/index.ts --strict --declaration --module commonjs --outDir lib && tsc src/index.ts --strict --declaration --module esnext --outDir es",
-    "prettier": "prettier --write \"src/**/*.ts\""
+    "prettier": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint src"
   },
   "files": [
     "lib/**/*.js",
@@ -37,6 +38,9 @@
   },
   "homepage": "https://github.com/statebacked/machine-def#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.43.0",
     "prettier": "^2.8.8",
     "typescript": "^5.1.6"
   }

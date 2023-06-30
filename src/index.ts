@@ -61,6 +61,7 @@ export type ReadRequest<Context = object, AuthContext = { sub?: string }> = {
  * Use WriteRequest<Context, EventShape, AuthContext> to specify the types of the context and events for your machine and the authContext you will provide.
  */
 export type WriteRequest<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   EventShape extends { type: string } = { type: string; [key: string]: any },
   Context = object,
   AuthContext = { sub?: string }
@@ -117,6 +118,7 @@ export type State = string | { [parentState: string]: State };
  *
  * Matches the state._event property of an XState state.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SCXMLEvent<EventShape = { type: string; [key: string]: any }> = {
   /**
    * The name of the event. `name` matches the `type` property of an XState event.
