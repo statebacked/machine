@@ -5,8 +5,12 @@
  * Otherwise, the request will be rejected with a 403 status and `{ code: "denied-by-machine-definition" }`.
  *
  * `allowRead` must be exported from your machine definition file.
+ *
+ * Use `AllowRead<Context, AuthContext>` to specify the shape of your machine's context and the expected shape of the authContext you will provide.
  */
-export type AllowRead = (readRequest: ReadRequest) => boolean;
+export type AllowRead<Context = object, AuthContext = { sub?: string }> = (
+  readRequest: ReadRequest<Context, AuthContext>
+) => boolean;
 
 /**
  * `allowWrite` will be called for every request to send an event to an instance of the machine you are exposing.
@@ -15,8 +19,15 @@ export type AllowRead = (readRequest: ReadRequest) => boolean;
  * Otherwise, the request will be rejected with a 403 status and `{ code: "denied-by-machine-definition" }`.
  *
  * `allowWrite` must be exported from your machine definition file.
+ *
+ * Use `AllowRead<EventShape, Context, AuthContext>` to specify the shape of your machine's events and context and the expected shape of the authContext you will provide.
  */
-export type AllowWrite = (writeRequest: WriteRequest) => boolean;
+export type AllowWrite<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  EventShape extends { type: string } = { type: string; [key: string]: any },
+  Context = object,
+  AuthContext = { sub?: string }
+> = (writeRequest: WriteRequest<EventShape, Context, AuthContext>) => boolean;
 
 /**
  * A request to read the state of a machine instance.
