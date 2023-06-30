@@ -1,0 +1,43 @@
+{
+  "name": "@statebacked/machine-def",
+  "version": "0.1.0",
+  "description": "Useful types and utilities for defining StateBacked.dev machine definitions for the State Backed XState backend as a service",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc src/index.ts --strict --declaration --module commonjs --outDir lib && tsc src/index.ts --strict --declaration --module esnext --outDir es",
+    "prettier": "prettier --write \"src/**/*.ts\""
+  },
+  "files": [
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "es/**/*.js",
+    "es/**/*.d.ts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statebacked/machine-def.git"
+  },
+  "keywords": [
+    "statechart",
+    "state machine",
+    "scxml",
+    "state",
+    "finite state machine",
+    "state backed",
+    "backend as a service",
+    "paas"
+  ],
+  "author": "Adam Berger <adam@statebacked.dev>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/statebacked/machine-def/issues"
+  },
+  "homepage": "https://github.com/statebacked/machine-def#readme",
+  "devDependencies": {
+    "prettier": "^2.8.8",
+    "typescript": "^5.1.6"
+  }
+}
