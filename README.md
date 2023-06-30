@@ -17,7 +17,7 @@ yarn add @statebacked/machine-def
 
 Deno
 ```
-import type { AllowRead, AllowWrite } from "https://deno.land/x/statebacked/machine-def/mod.ts";
+import type { AllowRead, AllowWrite } from "https://deno.land/x/statebacked_machine_def/mod.ts";
 ```
 
 # Overview
