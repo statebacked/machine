@@ -1,6 +1,6 @@
-# machine-def
+# @statebacked/machine-def - State Backed machine definition types and utilities
 
-The utilities exported by this package are useful in defining [State Backed](https://statebacked.dev) machine definitions.
+The types and utilities exported by this package are useful in defining [State Backed](https://statebacked.dev) machine definitions.
 
 A State Backed machine definition consists of a javascript file that exports the following:
 - Default export an [XState](https://xstate.js.org/docs/) state machine (e.g. `export default createMachine(...)`)
