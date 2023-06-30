@@ -6,7 +6,7 @@
  *
  * `allowRead` must be exported from your machine definition file.
  */
-export type allowRead = (readRequest: ReadRequest) => boolean;
+export type AllowRead = (readRequest: ReadRequest) => boolean;
 
 /**
  * `allowWrite` will be called for every request to send an event to an instance of the machine you are exposing.
@@ -16,7 +16,7 @@ export type allowRead = (readRequest: ReadRequest) => boolean;
  *
  * `allowWrite` must be exported from your machine definition file.
  */
-export type allowWrite = (writeRequest: WriteRequest) => boolean;
+export type AllowWrite = (writeRequest: WriteRequest) => boolean;
 
 /**
  * A request to read the state of a machine instance.

@@ -1,7 +1,26 @@
 # @statebacked/machine-def - State Backed machine definition types and utilities
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/simplystated/f-of-xstate/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@statebacked/machine-def.svg?style=flat)](https://www.npmjs.com/package/@statebacked/machine-def) [![CI](https://github.com/statebacked/machine-def/actions/workflows/ci.yaml/badge.svg)](https://github.com/statebacked/machine-def/actions/workflows/ci.yaml) [![Docs](https://img.shields.io/badge/docs-machine_def-blue)](https://statebacked.github.io/machine-def/)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/statebacked/machine-def/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@statebacked/machine-def.svg?style=flat)](https://www.npmjs.com/package/@statebacked/machine-def) [![CI](https://github.com/statebacked/machine-def/actions/workflows/ci.yaml/badge.svg)](https://github.com/statebacked/machine-def/actions/workflows/ci.yaml) [![Docs](https://img.shields.io/badge/docs-machine_def-blue)](https://statebacked.github.io/machine-def/)
 
 The types and utilities exported by this package are useful in defining [State Backed](https://statebacked.dev) machine definitions.
+
+# Installation
+
+NPM
+```
+npm install --save @statebacked/machine-def
+```
+
+Yarn
+```
+yarn add @statebacked/machine-def
+```
+
+Deno
+```
+import type { AllowRead, AllowWrite } from "https://deno.land/x/statebacked/machine-def/mod.ts";
+```
+
+# Overview
 
 A State Backed machine definition consists of a javascript file that exports the following:
 - Default export an [XState](https://xstate.js.org/docs/) state machine (e.g. `export default createMachine(...)`)
