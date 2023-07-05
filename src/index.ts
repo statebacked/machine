@@ -67,16 +67,32 @@ export type ReadRequest<Context = object, AuthContext = { sub?: string }> = {
 };
 
 /**
- * A request to send an event to the machine instance.
+ * A request to initialize or send an event to the machine instance.
  *
- * Use WriteRequest<Context, EventShape, AuthContext> to specify the types of the context and events for your machine and the authContext you will provide.
+ * Use WriteRequest<EventShape, Context, AuthContext> to specify the types of the context and events for your machine and the authContext you will provide.
  */
 export type WriteRequest<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   EventShape extends { type: string } = { type: string; [key: string]: any },
   Context = object,
   AuthContext = { sub?: string }
+> =
+  | EventWriteRequest<EventShape, Context, AuthContext>
+  | InitializationWriteRequest<Context, AuthContext>;
+
+/**
+ * A request to send an event to the machine instance.
+ *
+ * Use EventWriteRequest<EventShape, Context, AuthContext> to specify the types of the context and events for your machine and the authContext you will provide.
+ */
+export type EventWriteRequest<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  EventShape extends { type: string } = { type: string; [key: string]: any },
+  Context = object,
+  AuthContext = { sub?: string }
 > = {
+  type: "event";
+
   /**
    * The name of the machine instance to read.
    *
@@ -104,6 +120,38 @@ export type WriteRequest<
    * The event that the requester wants to send to the machine instance.
    */
   event: SCXMLEvent<EventShape>;
+
+  /**
+   * The authorization context of the reader requesting access to the machine instance.
+   *
+   * The authorization context is the `act` claim of the JWT used to authenticate the reader (with the top-level `sub` claim used as a fallback if `act` did not provide a sub)
+   */
+  authContext: AuthContext;
+};
+
+/**
+ * A request to initialize the machine instance.
+ *
+ * Use InitializationWriteRequest<Context, AuthContext> to specify the types of the context and events for your machine and the authContext you will provide.
+ */
+export type InitializationWriteRequest<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Context = object,
+  AuthContext = { sub?: string }
+> = {
+  type: "initialization";
+
+  /**
+   * The name of the machine instance to read.
+   *
+   * This is the name you provided when you created the machine instance.
+   */
+  machineInstanceName: string;
+
+  /**
+   * The initial context provided to the machine instance.
+   */
+  context: Context;
 
   /**
    * The authorization context of the reader requesting access to the machine instance.
