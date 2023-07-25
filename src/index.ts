@@ -202,3 +202,67 @@ export type SCXMLEvent<EventShape = { type: string; [key: string]: any }> = {
    */
   data: EventShape;
 };
+
+/**
+ * upgradeState is called to migrate a state of an instance of a previous version of a machine
+ * to a state of the new version of the machine.
+ *
+ * upgradeState migrates individual states, one at a time, by mapping StatePaths of the previous
+ * machine version to StatePaths of the new machine version.
+ * StatePaths represent a path from the root of the machine, through the state hierarchy, to a single leaf state.
+ *
+ * Note that StatePaths represent the path to a single state, not the entire state of the machine.
+ * In cases where machines have parallel states, upgradeState will be called multiple times for each parallel leaf state.
+ * This is done to make upgradeState as simple as possible.
+ * Ideally, this should be a simple map from every possible state of the old machine to a state of the new machine.
+ *
+ * The provided context parameter may not be a valid context for oldState.
+ * This will happen because, in addition to migrating the current machine state, we also migrate
+ * the history of the machine to allow history states to continue to function properly.
+ * So, context is *a* context for the old version of the machine at or after the machine transitioned to oldState.
+ *
+ * To use your own context shapes, use UpgradeState<Context>. where Context is the *prior* machine version's context shape.
+ */
+export type UpgradeState<Context = object> = (
+  oldState: StatePath,
+  context: Context
+) => StatePath;
+
+/**
+ * upgradeContext is called to migrate the context of an instance of a previous version of a machine
+ * to the context of the new version of the machine.
+ *
+ * upgradeContext receives an array of StatePaths representing all states that the old machine was in
+ * (potentially >1 if the old machine had parallel states) and an array of StatePaths representing the mapping
+ * of those states into new machine version states by upgradeState.
+ *
+ * To use your own context shapes, use UpgradeContext<OldContext, NewContext>.
+ */
+export type UpgradeContext<OldContext = object, NewContext = object> = (
+  oldStates: Array<StatePath>,
+  newStates: Array<StatePath>,
+  context: OldContext
+) => NewContext;
+
+/**
+ * A path from the root of the machine, through the state hierarchy, to a single leaf state.
+ *
+ * For a machine like this:
+ * ```
+ * {
+ *  initial: "a",
+ *  states: {
+ *   a: {
+ *     initial: "b",
+ *     states: {
+ *       b: {}
+ *     }
+ *   }
+ *  }
+ * }
+ * ```
+ *
+ * You may see a StatePath like this: ["a", "b"].
+ *
+ */
+export type StatePath = Array<string>;
