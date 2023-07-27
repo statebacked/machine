@@ -20,14 +20,14 @@ export type AllowRead<Context = object, AuthContext = { sub?: string }> = (
  *
  * `allowWrite` must be exported from your machine definition file.
  *
- * Use `AllowRead<EventShape, Context, AuthContext>` to specify the shape of your machine's events and context and the expected shape of the authContext you will provide.
+ * Use `AllowRead<Context, AuthContext, EventShape>` to specify the shape of your machine's events and context and the expected shape of the authContext you will provide.
  */
 export type AllowWrite<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EventShape extends { type: string } = { type: string; [key: string]: any },
   Context = object,
-  AuthContext = { sub?: string }
-> = (writeRequest: WriteRequest<EventShape, Context, AuthContext>) => boolean;
+  AuthContext = { sub?: string },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  EventShape extends { type: string } = { type: string; [key: string]: any }
+> = (writeRequest: WriteRequest<Context, AuthContext, EventShape>) => boolean;
 
 /**
  * A request to read the state of a machine instance.
@@ -69,27 +69,27 @@ export type ReadRequest<Context = object, AuthContext = { sub?: string }> = {
 /**
  * A request to initialize or send an event to the machine instance.
  *
- * Use WriteRequest<EventShape, Context, AuthContext> to specify the types of the context and events for your machine and the authContext you will provide.
+ * Use WriteRequest<Context, AuthContext, EventShape> to specify the types of the context and events for your machine and the authContext you will provide.
  */
 export type WriteRequest<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EventShape extends { type: string } = { type: string; [key: string]: any },
   Context = object,
-  AuthContext = { sub?: string }
+  AuthContext = { sub?: string },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  EventShape extends { type: string } = { type: string; [key: string]: any }
 > =
-  | EventWriteRequest<EventShape, Context, AuthContext>
+  | EventWriteRequest<Context, AuthContext, EventShape>
   | InitializationWriteRequest<Context, AuthContext>;
 
 /**
  * A request to send an event to the machine instance.
  *
- * Use EventWriteRequest<EventShape, Context, AuthContext> to specify the types of the context and events for your machine and the authContext you will provide.
+ * Use EventWriteRequest<Context, AuthContext, EventShape> to specify the types of the context and events for your machine and the authContext you will provide.
  */
 export type EventWriteRequest<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EventShape extends { type: string } = { type: string; [key: string]: any },
   Context = object,
-  AuthContext = { sub?: string }
+  AuthContext = { sub?: string },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  EventShape extends { type: string } = { type: string; [key: string]: any }
 > = {
   type: "event";
 
