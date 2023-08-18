@@ -20,14 +20,15 @@ export type AllowRead<Context = object, AuthContext = { sub?: string }> = (
  *
  * `allowWrite` must be exported from your machine definition file.
  *
- * Use `AllowRead<Context, AuthContext, EventShape>` to specify the shape of your machine's events and context and the expected shape of the authContext you will provide.
+ * Use `AllowRead<Context, AuthContext, EventShape, StateShape>` to specify the shape of your machine's state, events and context and the expected shape of the authContext you will provide.
  */
 export type AllowWrite<
   Context = object,
   AuthContext = { sub?: string },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EventShape extends { type: string } = { type: string; [key: string]: any }
-> = (writeRequest: WriteRequest<Context, AuthContext, EventShape>) => boolean;
+  EventShape extends { type: string } = { type: string; [key: string]: any },
+  StateShape extends StateValue = StateValue,
+> = (writeRequest: WriteRequest<Context, AuthContext, EventShape, StateShape>) => boolean;
 
 /**
  * A request to read the state of a machine instance.
@@ -51,7 +52,7 @@ export type ReadRequest<Context = object, AuthContext = { sub?: string }> = {
    *
    * Identical to the state.value property of an XState state.
    */
-  state: State;
+  state: StateValue;
 
   /**
    * The context of the machine instance.
@@ -69,27 +70,29 @@ export type ReadRequest<Context = object, AuthContext = { sub?: string }> = {
 /**
  * A request to initialize or send an event to the machine instance.
  *
- * Use WriteRequest<Context, AuthContext, EventShape> to specify the types of the context and events for your machine and the authContext you will provide.
+ * Use WriteRequest<Context, AuthContext, EventShape, StateShape> to specify the types of the state, context and events for your machine and the authContext you will provide.
  */
 export type WriteRequest<
   Context = object,
   AuthContext = { sub?: string },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EventShape extends { type: string } = { type: string; [key: string]: any }
+  EventShape extends { type: string } = { type: string; [key: string]: any },
+  StateShape extends StateValue = StateValue,
 > =
-  | EventWriteRequest<Context, AuthContext, EventShape>
+  | EventWriteRequest<Context, AuthContext, EventShape, StateShape>
   | InitializationWriteRequest<Context, AuthContext>;
 
 /**
  * A request to send an event to the machine instance.
  *
- * Use EventWriteRequest<Context, AuthContext, EventShape> to specify the types of the context and events for your machine and the authContext you will provide.
+ * Use EventWriteRequest<Context, AuthContext, EventShape, StateShape> to specify the types of the state, context and events for your machine and the authContext you will provide.
  */
 export type EventWriteRequest<
   Context = object,
   AuthContext = { sub?: string },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EventShape extends { type: string } = { type: string; [key: string]: any }
+  EventShape extends { type: string } = { type: string; [key: string]: any },
+  StateShape extends StateValue = StateValue,
 > = {
   type: "event";
 
@@ -109,7 +112,7 @@ export type EventWriteRequest<
    *
    * Identical to the state.value property of an XState state.
    */
-  state: State;
+  state: StateShape;
 
   /**
    * The context of the machine instance.
@@ -119,7 +122,7 @@ export type EventWriteRequest<
   /**
    * The event that the requester wants to send to the machine instance.
    */
-  event: SCXMLEvent<EventShape>;
+  event: EventShape;
 
   /**
    * The authorization context of the reader requesting access to the machine instance.
@@ -170,38 +173,7 @@ export type InitializationWriteRequest<
  *
  * Identical to the state.value property of an XState state.
  */
-export type State = string | { [parentState: string]: State };
-
-/**
- * A standardized format for the events that can be sent to a machine instance.
- *
- * Matches the state._event property of an XState state.
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type SCXMLEvent<EventShape = { type: string; [key: string]: any }> = {
-  /**
-   * The name of the event. `name` matches the `type` property of an XState event.
-   */
-  name: string;
-
-  /**
-   * The type of the event.
-   *  - "platform" is for events raised by the platform itself, such as error events,
-   *  - "internal" is for events raised by <raise> and <send> with target '_internal'
-   *  - "external" is for all other events. Authorization is only checked for "external" events.
-   */
-  type: "platform" | "internal" | "external";
-
-  /**
-   * The origin of the event. This is NOT YET supported for externally-sent events in the State Backed platform.
-   */
-  origin: undefined;
-
-  /**
-   * The user-sent event.
-   */
-  data: EventShape;
-};
+export type StateValue = string | { [parentState: string]: StateValue };
 
 /**
  * upgradeState is called to migrate a state of an instance of a previous version of a machine
