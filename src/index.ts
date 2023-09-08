@@ -240,3 +240,23 @@ export type UpgradeContext<OldContext = object, NewContext = object> = (
  *
  */
 export type StatePath = Array<string>;
+
+/**
+ * The shape of the `authContext` for anonymous sessions.
+ */
+export type AnonymousAuthContext = {
+  /**
+   * The session ID of the anonymous session.
+   */
+  sid: string;
+
+  /**
+   * The device ID of the anonymous session.
+   */
+  did: string;
+
+  /**
+   * An indicator that this is an anonymous session.
+   */
+  auth: "anonymous";
+};
