@@ -27,8 +27,10 @@ export type AllowWrite<
   AuthContext = { sub?: string },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   EventShape extends { type: string } = { type: string; [key: string]: any },
-  StateShape extends StateValue = StateValue,
-> = (writeRequest: WriteRequest<Context, AuthContext, EventShape, StateShape>) => boolean;
+  StateShape extends StateValue = StateValue
+> = (
+  writeRequest: WriteRequest<Context, AuthContext, EventShape, StateShape>
+) => boolean;
 
 /**
  * A request to read the state of a machine instance.
@@ -77,7 +79,7 @@ export type WriteRequest<
   AuthContext = { sub?: string },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   EventShape extends { type: string } = { type: string; [key: string]: any },
-  StateShape extends StateValue = StateValue,
+  StateShape extends StateValue = StateValue
 > =
   | EventWriteRequest<Context, AuthContext, EventShape, StateShape>
   | InitializationWriteRequest<Context, AuthContext>;
@@ -92,7 +94,7 @@ export type EventWriteRequest<
   AuthContext = { sub?: string },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   EventShape extends { type: string } = { type: string; [key: string]: any },
-  StateShape extends StateValue = StateValue,
+  StateShape extends StateValue = StateValue
 > = {
   type: "event";
 
