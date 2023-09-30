@@ -2,9 +2,9 @@
   "entryPoints": ["./src/index.ts"],
   "out": "doc",
   "sidebarLinks": {
-    "State Backed": "https://statebacked.dev",
+    "State Backed": "https://www.statebacked.dev",
     "State Backed Docs": "https://docs.statebacked.dev",
-    "Github": "https://github.com/statebacked/machine-def"
+    "Github": "https://github.com/statebacked/machine"
   },
   "navigationLinks": {
     "State Backed": "https://statebacked.dev",
