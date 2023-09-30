@@ -64,14 +64,14 @@ export const spawn = (
   instanceDescriptor: PersistentInstanceDescriptor,
   opts?: SpawnOptions
 ): PersistentActorRef => {
-  if (typeof globalThis?.__statebaked_rt?.spawn === "function") {
-    return globalThis.__statebaked_rt.spawn(instanceDescriptor, opts);
+  if (typeof (globalThis as any)?.__statebaked_rt?.spawn === "function") {
+    return (globalThis as any).__statebaked_rt.spawn(instanceDescriptor, opts);
   }
 
   return {
     ...instanceDescriptor,
     type: "statebacked.instance",
-    id: opts.name ?? crypto.randomUUID(),
+    id: opts?.name ?? crypto.randomUUID(),
     machineInstanceName:
       instanceDescriptor.machineInstanceName ?? crypto.randomUUID(),
   };
