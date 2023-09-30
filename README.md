@@ -1,5 +1,5 @@
 # @statebacked/machine - State Backed machine definition types and runtime utilities
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/statebacked/machine/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@statebacked/machine.svg?style=flat)](https://www.npmjs.com/package/@statebacked/machine) [![CI](https://github.com/statebacked/machine/actions/workflows/ci.yaml/badge.svg)](https://github.com/statebacked/machine/actions/workflows/ci.yaml) [![Docs](https://img.shields.io/badge/docs-machine_def-blue)](https://statebacked.github.io/machine/)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/statebacked/machine/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@statebacked/machine.svg?style=flat)](https://www.npmjs.com/package/@statebacked/machine) [![CI](https://github.com/statebacked/machine/actions/workflows/ci.yaml/badge.svg)](https://github.com/statebacked/machine/actions/workflows/ci.yaml) [![Docs](https://img.shields.io/badge/docs-machine-blue)](https://statebacked.github.io/machine/)
 
 The types and utilities exported by this package are useful in defining [State Backed](https://statebacked.dev) machine definitions.
 
@@ -17,7 +17,7 @@ yarn add @statebacked/machine
 
 Deno
 ```
-import type { AllowRead, AllowWrite } from "https://deno.land/x/statebacked_machine_def/mod.ts";
+import type { AllowRead, AllowWrite } from "https://deno.land/x/statebacked_machine/mod.ts";
 ```
 
 # Overview
