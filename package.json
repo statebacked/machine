@@ -1,6 +1,6 @@
 {
-  "name": "@statebacked/machine-def",
-  "version": "0.4.1",
+  "name": "@statebacked/machine",
+  "version": "0.5.0",
   "description": "Useful types and utilities for defining StateBacked.dev machine definitions for the State Backed XState backend as a service",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/statebacked/machine-def.git"
+    "url": "git+https://github.com/statebacked/machine.git"
   },
   "keywords": [
     "statechart",
@@ -36,9 +36,9 @@
   "author": "Adam Berger <adam@statebacked.dev>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/statebacked/machine-def/issues"
+    "url": "https://github.com/statebacked/machine/issues"
   },
-  "homepage": "https://github.com/statebacked/machine-def#readme",
+  "homepage": "https://github.com/statebacked/machine#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",

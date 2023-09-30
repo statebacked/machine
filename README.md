@@ -1,5 +1,5 @@
-# @statebacked/machine-def - State Backed machine definition types and utilities
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/statebacked/machine-def/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@statebacked/machine-def.svg?style=flat)](https://www.npmjs.com/package/@statebacked/machine-def) [![CI](https://github.com/statebacked/machine-def/actions/workflows/ci.yaml/badge.svg)](https://github.com/statebacked/machine-def/actions/workflows/ci.yaml) [![Docs](https://img.shields.io/badge/docs-machine_def-blue)](https://statebacked.github.io/machine-def/)
+# @statebacked/machine - State Backed machine definition types and runtime utilities
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/statebacked/machine/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/@statebacked/machine.svg?style=flat)](https://www.npmjs.com/package/@statebacked/machine) [![CI](https://github.com/statebacked/machine/actions/workflows/ci.yaml/badge.svg)](https://github.com/statebacked/machine/actions/workflows/ci.yaml) [![Docs](https://img.shields.io/badge/docs-machine_def-blue)](https://statebacked.github.io/machine/)
 
 The types and utilities exported by this package are useful in defining [State Backed](https://statebacked.dev) machine definitions.
 
@@ -7,12 +7,12 @@ The types and utilities exported by this package are useful in defining [State B
 
 NPM
 ```
-npm install --save @statebacked/machine-def
+npm install --save @statebacked/machine
 ```
 
 Yarn
 ```
-yarn add @statebacked/machine-def
+yarn add @statebacked/machine
 ```
 
 Deno
@@ -37,4 +37,4 @@ Check out our [docs](https://docs.statebacked.dev) and get started with the [smp
 
 # License
 
-@statebacked/machine-def is [MIT licensed](https://github.com/statebacked/machine-def/blob/main/LICENSE).
+@statebacked/machine is [MIT licensed](https://github.com/statebacked/machine/blob/main/LICENSE).
