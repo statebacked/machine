@@ -8,7 +8,7 @@
  *
  * Use `AllowRead<Context, AuthContext>` to specify the shape of your machine's context and the expected shape of the authContext you will provide.
  */
-export type AllowRead<Context = object, AuthContext = { sub?: string }> = (
+export type AllowRead<Context = object, AuthContext = DefaultAuthContext> = (
   readRequest: ReadRequest<Context, AuthContext>
 ) => boolean;
 
@@ -24,9 +24,9 @@ export type AllowRead<Context = object, AuthContext = { sub?: string }> = (
  */
 export type AllowWrite<
   Context = object,
-  AuthContext = { sub?: string },
+  AuthContext = DefaultAuthContext,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EventShape extends { type: string } = { type: string; [key: string]: any },
+  EventShape extends Event = DefaultEvent,
   StateShape extends StateValue = StateValue
 > = (
   writeRequest: WriteRequest<Context, AuthContext, EventShape, StateShape>
@@ -37,7 +37,7 @@ export type AllowWrite<
  *
  * Use ReadRequest<Context, AuthContext> to specify the types of the context for your machine and the authContext you will provide.
  */
-export type ReadRequest<Context = object, AuthContext = { sub?: string }> = {
+export type ReadRequest<Context = object, AuthContext = DefaultAuthContext> = {
   /**
    * The name of the machine instance to read.
    *
@@ -76,9 +76,9 @@ export type ReadRequest<Context = object, AuthContext = { sub?: string }> = {
  */
 export type WriteRequest<
   Context = object,
-  AuthContext = { sub?: string },
+  AuthContext = DefaultAuthContext,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EventShape extends { type: string } = { type: string; [key: string]: any },
+  EventShape extends Event = DefaultEvent,
   StateShape extends StateValue = StateValue
 > =
   | EventWriteRequest<Context, AuthContext, EventShape, StateShape>
@@ -91,9 +91,9 @@ export type WriteRequest<
  */
 export type EventWriteRequest<
   Context = object,
-  AuthContext = { sub?: string },
+  AuthContext = DefaultAuthContext,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  EventShape extends { type: string } = { type: string; [key: string]: any },
+  EventShape extends Event = DefaultEvent,
   StateShape extends StateValue = StateValue
 > = {
   type: "event";
@@ -142,7 +142,7 @@ export type EventWriteRequest<
 export type InitializationWriteRequest<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Context = object,
-  AuthContext = { sub?: string }
+  AuthContext = DefaultAuthContext
 > = {
   type: "initialization";
 
@@ -260,3 +260,35 @@ export type AnonymousAuthContext = {
    */
   auth: "anonymous";
 };
+
+/**
+ * The shape of the `authContext` for events sent from one machine instance to another
+ * (e.g. from a parent to a spawned persistent child).
+ *
+ * Inter-machine communication is only allowed within machines of a single organization.
+ */
+export type InterMachineAuthContext = {
+  /**
+   * Verified information about the sender of the event.
+   */
+  stateBackedSender: {
+    /**
+     * The machine name of the sender.
+     */
+    machineName: string;
+
+    /**
+     * The machine instance name of the sender.
+     */
+    machineInstanceName: string;
+  };
+};
+
+export type DefaultAuthContext = Partial<InterMachineAuthContext> &
+  Partial<AnonymousAuthContext> & {
+    sub?: string;
+  };
+
+export type Event = { type: string };
+
+export type DefaultEvent = { type: string; [key: string]: any };
