@@ -60,7 +60,7 @@ export type SpawnOptions = {
  * @param opts spawn options
  * @returns A PersistentActorRef
  */
-export const spawn = (
+export const spawnPersistentInstance = (
   instanceDescriptor: PersistentInstanceDescriptor,
   opts?: SpawnOptions
 ): PersistentActorRef => {
@@ -99,7 +99,7 @@ export const spawn = (
  * @param instanceDescriptor PersistentInstanceDescriptor
  * @returns An object to be provided as the `src` property of an xstate invoke.
  */
-export const invocableSource = (
+export const persistentInvocableSource = (
   instanceDescriptor: PersistentInstanceDescriptor
 ) => ({
   type: "statebacked.invoke",
