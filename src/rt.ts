@@ -122,7 +122,7 @@ export const sendTo = (
     | string
     | PersistentActorRef
     | ((
-        ctx: unknown,
+        ctx: Record<string, unknown>,
         event: { type: string } & Record<string, unknown>
       ) => string | PersistentActorRef),
   event: any,
