@@ -117,20 +117,20 @@ export const persistentInvocableSource = (
  * @param opts Send options including delay and event ID (which can be used to cancel the event)
  * @returns Action object to be used in an xstate definition
  */
-export const sendTo = (
+export const sendTo = <
+  TContext = Record<string, unknown>,
+  TEvent = { type: string } & Record<string, unknown>
+>(
   actor:
     | string
     | PersistentActorRef
-    | ((
-        ctx: Record<string, unknown>,
-        event: { type: string } & Record<string, unknown>
-      ) => string | PersistentActorRef),
+    | ((ctx: TContext, event: TEvent) => string | PersistentActorRef),
   event: any,
   opts?: {
     delay:
       | string
       | number
-      | ((ctx: Record<string, unknown>, event: Event) => string | number);
+      | ((ctx: TContext, event: TEvent) => string | number);
     id: string | number;
   }
 ) => {
