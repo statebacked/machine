@@ -64,8 +64,8 @@ export const spawnPersistentInstance = (
   instanceDescriptor: PersistentInstanceDescriptor,
   opts?: SpawnOptions
 ): PersistentActorRef => {
-  if (typeof (globalThis as any)?.__statebaked_rt?.spawn === "function") {
-    return (globalThis as any).__statebaked_rt.spawn(instanceDescriptor, opts);
+  if (typeof (globalThis as any)?.__statebacked_rt?.spawn === "function") {
+    return (globalThis as any).__statebacked_rt.spawn(instanceDescriptor, opts);
   }
 
   return {
