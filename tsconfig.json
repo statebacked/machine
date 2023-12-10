@@ -1,6 +1,6 @@
 {
     "include": ["src/**/*.ts"],
     "compilerOptions": {
-        "allowImportingTsExtensions": true
+        "lib": ["ES2015", "WebWorker"]
     }
 }

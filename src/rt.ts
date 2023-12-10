@@ -77,6 +77,122 @@ export const spawnPersistentInstance = (
   };
 };
 
+type EventObject = { type: string };
+interface AnyEventObject extends EventObject {
+  [key: string]: any;
+}
+
+type Event<TEvent extends EventObject> = TEvent["type"] | TEvent;
+
+type Sender<TEvent extends EventObject> = (event: Event<TEvent>) => void;
+type Receiver<TEvent extends EventObject> = (
+  listener: {
+    bivarianceHack(event: TEvent): void;
+  }["bivarianceHack"]
+) => void;
+
+type InvokeCallback<
+  TEvent extends EventObject = AnyEventObject,
+  TSentEvent extends EventObject = AnyEventObject
+> = (
+  callback: Sender<TSentEvent>,
+  onReceive: Receiver<TEvent>
+) => (() => void) | Promise<any> | void;
+
+interface Subscription {
+  unsubscribe(): void;
+}
+
+interface Observer<T> {
+  next: (value: T) => void;
+  error: (err: any) => void;
+  complete: () => void;
+}
+
+interface InteropSubscribable<T> {
+  subscribe(observer: Observer<T>): Subscription;
+}
+
+declare global {
+  interface SymbolConstructor {
+    readonly observable: symbol;
+  }
+}
+
+interface InteropObservable<T> {
+  [Symbol.observable]: () => InteropSubscribable<T>;
+}
+
+interface Subscribable<T> extends InteropSubscribable<T> {
+  subscribe(observer: Observer<T>): Subscription;
+  subscribe(
+    next: (value: T) => void,
+    error?: (error: any) => void,
+    complete?: () => void
+  ): Subscription;
+}
+
+interface ActorRef<TEvent extends EventObject, TEmitted = any>
+  extends Subscribable<TEmitted>,
+    InteropObservable<TEmitted> {
+  send: Sender<TEvent>; // TODO: this should just be TEvent
+  id: string;
+  getSnapshot: () => TEmitted | undefined;
+  stop?: () => void;
+  toJSON?: () => any;
+}
+
+interface ActorContext<TEvent extends EventObject, TEmitted> {
+  parent?: ActorRef<any, any>;
+  self: ActorRef<TEvent, TEmitted>;
+  id: string;
+  observers: Set<Observer<TEmitted>>;
+}
+
+interface Behavior<TEvent extends EventObject, TEmitted = any> {
+  transition: (
+    state: TEmitted,
+    event: TEvent,
+    actorCtx: ActorContext<TEvent, TEmitted>
+  ) => TEmitted;
+  initialState: TEmitted;
+  start?: (actorCtx: ActorContext<TEvent, TEmitted>) => TEmitted;
+}
+
+interface AnyStateMachine {
+  __xstatenode: true;
+}
+
+type Spawnable =
+  | AnyStateMachine
+  | PromiseLike<any>
+  | InvokeCallback
+  | InteropObservable<any>
+  | Subscribable<any>
+  | Behavior<any>;
+
+export type EphemeralSpawnOptions = {
+  name?: string;
+  autoForward?: boolean;
+  sync?: boolean;
+};
+
+/**
+ * Spawn an ephemeral child instance.
+ *
+ * Same as `spawn` from xstate but ensures compatibility with State Backed packaging and runtime.
+ *
+ * @param entity
+ * @param nameOrOptions
+ * @returns
+ */
+export const spawnEphemeralInstance = (
+  entity: Spawnable,
+  nameOrOptions?: string | EphemeralSpawnOptions
+): ActorRef<any> => {
+  return (globalThis as any).__statebacked_rt.spawn(entity, nameOrOptions);
+};
+
 /**
  * Format a persistent instance descriptor to use as an xstate invoke source.
  *

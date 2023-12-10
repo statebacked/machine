@@ -8,7 +8,7 @@
   "sideEffects": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc src/index.ts --strict --declaration --module commonjs --outDir lib && tsc src/index.ts --strict --declaration --module esnext --outDir es",
+    "build": "tsc src/index.ts --strict --declaration --module commonjs --outDir lib --lib ES2015,WebWorker && tsc src/index.ts --strict --declaration --module esnext --outDir es --lib ES2015,WebWorker",
     "prettier": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint src",
     "doc": "typedoc"
