@@ -80,29 +80,29 @@ export const spawnPersistentInstance = (
 /**
  * Event object.
  */
-export type EventObject = { type: string };
+export type XStateEventObject = { type: string };
 
 /**
  * Any event object.
  */
-export interface AnyEventObject extends EventObject {
+export interface AnyXStateEventObject extends XStateEventObject {
   [key: string]: any;
 }
 
 /**
  * String or object event.
  */
-export type Event<TEvent extends EventObject> = TEvent["type"] | TEvent;
+export type XStateEvent<TEvent extends XStateEventObject> = TEvent["type"] | TEvent;
 
 /**
  * Event sender.
  */
-export type Sender<TEvent extends EventObject> = (event: Event<TEvent>) => void;
+export type XStateSender<TEvent extends XStateEventObject> = (event: XStateEvent<TEvent>) => void;
 
 /**
  * Event receiver.
  */
-export type Receiver<TEvent extends EventObject> = (
+export type XStateReceiver<TEvent extends XStateEventObject> = (
   listener: {
     bivarianceHack(event: TEvent): void;
   }["bivarianceHack"]
@@ -111,25 +111,25 @@ export type Receiver<TEvent extends EventObject> = (
 /**
  * Invoke callback spawnable.
  */
-export type InvokeCallback<
-  TEvent extends EventObject = AnyEventObject,
-  TSentEvent extends EventObject = AnyEventObject
+export type XStateInvokeCallback<
+  TEvent extends XStateEventObject = AnyXStateEventObject,
+  TSentEvent extends XStateEventObject = AnyXStateEventObject
 > = (
-  callback: Sender<TSentEvent>,
-  onReceive: Receiver<TEvent>
+  callback: XStateSender<TSentEvent>,
+  onReceive: XStateReceiver<TEvent>
 ) => (() => void) | Promise<any> | void;
 
 /**
  * Subscription.
  */
-export interface Subscription {
+export interface XStateSubscription {
   unsubscribe(): void;
 }
 
 /**
  * Observer spawnable.
  */
-export interface Observer<T> {
+export interface XStateObserver<T> {
   next: (value: T) => void;
   error: (err: any) => void;
   complete: () => void;
@@ -138,8 +138,8 @@ export interface Observer<T> {
 /**
  * Subscribable for an InteropObservable.
  */
-export interface InteropSubscribable<T> {
-  subscribe(observer: Observer<T>): Subscription;
+export interface XStateInteropSubscribable<T> {
+  subscribe(observer: XStateObserver<T>): XStateSubscription;
 }
 
 declare global {
@@ -151,29 +151,29 @@ declare global {
 /**
  * Interop observable spawnable.
  */
-export interface InteropObservable<T> {
-  [Symbol.observable]: () => InteropSubscribable<T>;
+export interface XStateInteropObservable<T> {
+  [Symbol.observable]: () => XStateInteropSubscribable<T>;
 }
 
 /**
  * Subscribable spawnable.
  */
-export interface Subscribable<T> extends InteropSubscribable<T> {
-  subscribe(observer: Observer<T>): Subscription;
+export interface XStateSubscribable<T> extends XStateInteropSubscribable<T> {
+  subscribe(observer: XStateObserver<T>): XStateSubscription;
   subscribe(
     next: (value: T) => void,
     error?: (error: any) => void,
     complete?: () => void
-  ): Subscription;
+  ): XStateSubscription;
 }
 
 /**
  * Actor reference.
  */
-export interface XStateActorRef<TEvent extends EventObject, TEmitted = any>
-  extends Subscribable<TEmitted>,
-    InteropObservable<TEmitted> {
-  send: Sender<TEvent>; // TODO: this should just be TEvent
+export interface XStateActorRef<TEvent extends XStateEventObject, TEmitted = any>
+  extends XStateSubscribable<TEmitted>,
+    XStateInteropObservable<TEmitted> {
+  send: XStateSender<TEvent>; // TODO: this should just be TEvent
   id: string;
   getSnapshot: () => TEmitted | undefined;
   stop?: () => void;
@@ -183,43 +183,43 @@ export interface XStateActorRef<TEvent extends EventObject, TEmitted = any>
 /**
  * XState actor context.
  */
-export interface ActorContext<TEvent extends EventObject, TEmitted> {
+export interface XStateActorContext<TEvent extends XStateEventObject, TEmitted> {
   parent?: XStateActorRef<any, any>;
   self: XStateActorRef<TEvent, TEmitted>;
   id: string;
-  observers: Set<Observer<TEmitted>>;
+  observers: Set<XStateObserver<TEmitted>>;
 }
 
 /**
  * Behavior spawnable.
  */
-export interface Behavior<TEvent extends EventObject, TEmitted = any> {
+export interface XStateBehavior<TEvent extends XStateEventObject, TEmitted = any> {
   transition: (
     state: TEmitted,
     event: TEvent,
-    actorCtx: ActorContext<TEvent, TEmitted>
+    actorCtx: XStateActorContext<TEvent, TEmitted>
   ) => TEmitted;
   initialState: TEmitted;
-  start?: (actorCtx: ActorContext<TEvent, TEmitted>) => TEmitted;
+  start?: (actorCtx: XStateActorContext<TEvent, TEmitted>) => TEmitted;
 }
 
 /**
  * Any state machine.
  */
-export interface AnyStateMachine {
+export interface AnyXStateStateMachine {
   __xstatenode: true;
 }
 
 /**
  * Spawnable for spawnEphemeralInstance.
  */
-export type Spawnable =
-  | AnyStateMachine
+export type XStateSpawnable =
+  | AnyXStateStateMachine
   | PromiseLike<any>
-  | InvokeCallback
-  | InteropObservable<any>
-  | Subscribable<any>
-  | Behavior<any>;
+  | XStateInvokeCallback
+  | XStateInteropObservable<any>
+  | XStateSubscribable<any>
+  | XStateBehavior<any>;
 
 /**
  * Options for spawnEphemeralInstance.
@@ -240,7 +240,7 @@ export type EphemeralSpawnOptions = {
  * @returns
  */
 export const spawnEphemeralInstance = (
-  entity: Spawnable,
+  entity: XStateSpawnable,
   nameOrOptions?: string | EphemeralSpawnOptions
 ): XStateActorRef<any> => {
   return (globalThis as any).__statebacked_rt.spawn(entity, nameOrOptions);
