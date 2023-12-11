@@ -77,21 +77,41 @@ export const spawnPersistentInstance = (
   };
 };
 
-type EventObject = { type: string };
-interface AnyEventObject extends EventObject {
+/**
+ * Event object.
+ */
+export type EventObject = { type: string };
+
+/**
+ * Any event object.
+ */
+export interface AnyEventObject extends EventObject {
   [key: string]: any;
 }
 
-type Event<TEvent extends EventObject> = TEvent["type"] | TEvent;
+/**
+ * String or object event.
+ */
+export type Event<TEvent extends EventObject> = TEvent["type"] | TEvent;
 
-type Sender<TEvent extends EventObject> = (event: Event<TEvent>) => void;
-type Receiver<TEvent extends EventObject> = (
+/**
+ * Event sender.
+ */
+export type Sender<TEvent extends EventObject> = (event: Event<TEvent>) => void;
+
+/**
+ * Event receiver.
+ */
+export type Receiver<TEvent extends EventObject> = (
   listener: {
     bivarianceHack(event: TEvent): void;
   }["bivarianceHack"]
 ) => void;
 
-type InvokeCallback<
+/**
+ * Invoke callback spawnable.
+ */
+export type InvokeCallback<
   TEvent extends EventObject = AnyEventObject,
   TSentEvent extends EventObject = AnyEventObject
 > = (
@@ -99,17 +119,26 @@ type InvokeCallback<
   onReceive: Receiver<TEvent>
 ) => (() => void) | Promise<any> | void;
 
-interface Subscription {
+/**
+ * Subscription.
+ */
+export interface Subscription {
   unsubscribe(): void;
 }
 
-interface Observer<T> {
+/**
+ * Observer spawnable.
+ */
+export interface Observer<T> {
   next: (value: T) => void;
   error: (err: any) => void;
   complete: () => void;
 }
 
-interface InteropSubscribable<T> {
+/**
+ * Subscribable for an InteropObservable.
+ */
+export interface InteropSubscribable<T> {
   subscribe(observer: Observer<T>): Subscription;
 }
 
@@ -119,11 +148,17 @@ declare global {
   }
 }
 
-interface InteropObservable<T> {
+/**
+ * Interop observable spawnable.
+ */
+export interface InteropObservable<T> {
   [Symbol.observable]: () => InteropSubscribable<T>;
 }
 
-interface Subscribable<T> extends InteropSubscribable<T> {
+/**
+ * Subscribable spawnable.
+ */
+export interface Subscribable<T> extends InteropSubscribable<T> {
   subscribe(observer: Observer<T>): Subscription;
   subscribe(
     next: (value: T) => void,
@@ -132,7 +167,10 @@ interface Subscribable<T> extends InteropSubscribable<T> {
   ): Subscription;
 }
 
-interface ActorRef<TEvent extends EventObject, TEmitted = any>
+/**
+ * Actor reference.
+ */
+export interface XStateActorRef<TEvent extends EventObject, TEmitted = any>
   extends Subscribable<TEmitted>,
     InteropObservable<TEmitted> {
   send: Sender<TEvent>; // TODO: this should just be TEvent
@@ -142,14 +180,20 @@ interface ActorRef<TEvent extends EventObject, TEmitted = any>
   toJSON?: () => any;
 }
 
-interface ActorContext<TEvent extends EventObject, TEmitted> {
-  parent?: ActorRef<any, any>;
-  self: ActorRef<TEvent, TEmitted>;
+/**
+ * XState actor context.
+ */
+export interface ActorContext<TEvent extends EventObject, TEmitted> {
+  parent?: XStateActorRef<any, any>;
+  self: XStateActorRef<TEvent, TEmitted>;
   id: string;
   observers: Set<Observer<TEmitted>>;
 }
 
-interface Behavior<TEvent extends EventObject, TEmitted = any> {
+/**
+ * Behavior spawnable.
+ */
+export interface Behavior<TEvent extends EventObject, TEmitted = any> {
   transition: (
     state: TEmitted,
     event: TEvent,
@@ -159,11 +203,17 @@ interface Behavior<TEvent extends EventObject, TEmitted = any> {
   start?: (actorCtx: ActorContext<TEvent, TEmitted>) => TEmitted;
 }
 
-interface AnyStateMachine {
+/**
+ * Any state machine.
+ */
+export interface AnyStateMachine {
   __xstatenode: true;
 }
 
-type Spawnable =
+/**
+ * Spawnable for spawnEphemeralInstance.
+ */
+export type Spawnable =
   | AnyStateMachine
   | PromiseLike<any>
   | InvokeCallback
@@ -171,6 +221,9 @@ type Spawnable =
   | Subscribable<any>
   | Behavior<any>;
 
+/**
+ * Options for spawnEphemeralInstance.
+ */
 export type EphemeralSpawnOptions = {
   name?: string;
   autoForward?: boolean;
@@ -189,7 +242,7 @@ export type EphemeralSpawnOptions = {
 export const spawnEphemeralInstance = (
   entity: Spawnable,
   nameOrOptions?: string | EphemeralSpawnOptions
-): ActorRef<any> => {
+): XStateActorRef<any> => {
   return (globalThis as any).__statebacked_rt.spawn(entity, nameOrOptions);
 };
 
