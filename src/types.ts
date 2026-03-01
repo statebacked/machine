@@ -292,3 +292,65 @@ export type DefaultAuthContext = Partial<InterMachineAuthContext> &
 export type Event = { type: string };
 
 export type DefaultEvent = { type: string; [key: string]: any };
+
+export type HttpMethod =
+  | "GET"
+  | "POST"
+  | "PUT"
+  | "DELETE"
+  | "PATCH"
+  | "HEAD"
+  | "OPTIONS";
+
+export type HttpApiRequest = {
+  body: unknown;
+  headers: Record<string, string>;
+  method: HttpMethod;
+  query: Record<string, string>;
+};
+
+export type HttpApiHandlerResponse<
+  Context = object,
+  EventShape extends Event = DefaultEvent
+> = {
+  machineInstanceName: string;
+  event: EventShape;
+  authContext: Record<string, unknown>;
+  initialContext?: Context;
+};
+
+export type HttpApiResponseMapperInput<
+  Context = object,
+  StateShape extends StateValue = StateValue,
+  Output = unknown
+> = {
+  state: StateShape;
+  context: Context;
+  result: Output;
+};
+
+export type HttpApiResponse<Body = unknown> = {
+  statusCode: number;
+  headers: Record<string, string>;
+  body: Body;
+};
+
+export type HttpApiMapper<
+  Context = object,
+  EventShape extends Event = DefaultEvent,
+  StateShape extends StateValue = StateValue,
+  Output = unknown,
+  Body = unknown
+> = Record<
+  string,
+  {
+    handler: (
+      request: HttpApiRequest
+    ) =>
+      | HttpApiHandlerResponse<Context, EventShape>
+      | Promise<HttpApiHandlerResponse<Context, EventShape>>;
+    responseMapper: (
+      input: HttpApiResponseMapperInput<Context, StateShape, Output>
+    ) => HttpApiResponse<Body> | Promise<HttpApiResponse<Body>>;
+  }
+>;
