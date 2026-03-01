@@ -311,11 +311,12 @@ export type HttpApiRequest = {
 
 export type HttpApiHandlerResponse<
   Context = object,
-  EventShape extends Event = DefaultEvent
+  EventShape extends Event = DefaultEvent,
+  AuthContext = DefaultAuthContext
 > = {
   machineInstanceName: string;
   event: EventShape;
-  authContext: Record<string, unknown>;
+  authContext: AuthContext;
   initialContext?: Context;
 };
 
@@ -338,6 +339,7 @@ export type HttpApiResponse<Body = unknown> = {
 export type HttpApiMapper<
   Context = object,
   EventShape extends Event = DefaultEvent,
+  AuthContext = DefaultAuthContext,
   StateShape extends StateValue = StateValue,
   Output = unknown,
   Body = unknown
@@ -347,8 +349,8 @@ export type HttpApiMapper<
     handler: (
       request: HttpApiRequest
     ) =>
-      | HttpApiHandlerResponse<Context, EventShape>
-      | Promise<HttpApiHandlerResponse<Context, EventShape>>;
+      | HttpApiHandlerResponse<Context, EventShape, AuthContext>
+      | Promise<HttpApiHandlerResponse<Context, EventShape, AuthContext>>;
     responseMapper: (
       input: HttpApiResponseMapperInput<Context, StateShape, Output>
     ) => HttpApiResponse<Body> | Promise<HttpApiResponse<Body>>;
